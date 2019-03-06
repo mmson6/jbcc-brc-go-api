@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/jbcc/brc-api/internal/readmodel/rmwebservice"
+	"github.com/jbcc/brc-api/internal/writemodel/wmwebservice"
 	"github.com/jbcc/brc-api/pkg/logger"
 )
 
@@ -39,5 +40,5 @@ func addWriteModel(ctx context.Context, router *mux.Router) {
 	// Attach the read model endpoints
 	log := logger.Current(ctx)
 	log.Info("attaching write model endpoints")
-	// wmwebservice.AddRoutes(router)
+	wmwebservice.AddRoutes(router)
 }

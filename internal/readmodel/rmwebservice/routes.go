@@ -13,7 +13,8 @@ func AddRoutes(r *mux.Router) {
 
 	// Health GET requests
 	rGets.HandleFunc("/health", GetHealth)
-
+	rGets.HandleFunc("/me/{user_id}", GetMeIdentity)
+	rGets.HandleFunc("/records/{user_id}", GetUserRecords)
 	// Authenticated GET requests
 	// rGetsAuth := rGets.NewRoute().Subrouter()
 	// rGetsAuth.Use(webmiddleware.AuthenticateRequestJWT)
