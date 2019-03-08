@@ -1,13 +1,17 @@
 package rmwebservice
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 
+	"github.com/jbcc/brc-api/internal/models"
+	"github.com/jbcc/brc-api/internal/readmodel/rmrepository"
 	"github.com/jbcc/brc-api/internal/webresponse"
 	"github.com/jbcc/brc-api/pkg/logger"
 )
@@ -26,21 +30,26 @@ func GetUserRecords(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	log := logger.Current(ctx).WithFields(logrus.Fields{
-		"func":    "GetUserRecords",
+		"func":    "GetUserIdentity",
 		"package": "rmwebservice",
 	})
-	log.Info(`getting system health`)
-	log.Info(`getting system health hahaha mike check`)
 
-	version := "v1"
-
-	responseObj := GetUserRecordsResponse{
-		Status:  "UP",
-		Version: version,
-		UserID:  userID,
+	// Guard statements
+	if userID == "" {
+		err := errors.New("user ID not found")
+		webresponse.WriteErrorJSON(ctx, w, err)
+		return
 	}
 
-	jsonBin, err := json.Marshal(responseObj)
+	// Find user record by userID
+	userRecordRef, err := findUserRecordByUserID(ctx, userID)
+	if err != nil {
+		log.WithError(err).Error("unable to find user record")
+		webresponse.WriteErrorJSON(ctx, w, err)
+		return
+	}
+
+	jsonBin, err := json.Marshal(userRecordRef)
 	if err != nil {
 		log.WithError(err).Error("unable to convert response object to JSON")
 		webresponse.WriteErrorJSON(ctx, w, err)
@@ -48,13 +57,22 @@ func GetUserRecords(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send the response
-
 	contentLengthInt := len(jsonBin)
 	contentLength := strconv.FormatInt(int64(contentLengthInt), 10)
 
 	w.Header().Set("Content-Length", contentLength)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.WriteHeader(200)
 
 	_, _ = w.Write(jsonBin)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// PRIVATE FUNCTIONS
+
+func findUserRecordByUserID(ctx context.Context, userID string) (*models.UserRecord, error) {
+	repo := rmrepository.Build(ctx)
+	return repo.ReadUserRecordByUserID(ctx, userID)
 }

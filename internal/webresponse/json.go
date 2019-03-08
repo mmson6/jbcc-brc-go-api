@@ -126,6 +126,8 @@ func writeHorizonErrorJSON(ctx context.Context, w http.ResponseWriter, herr *her
 	lengthStr := strconv.FormatInt(int64(length), 10)
 	headers.Set("Content-Type", "application/json")
 	headers.Set("Content-Length", lengthStr)
+	headers.Set("Access-Control-Allow-Origin", "*")
+	headers.Set("Access-Control-Allow-Credentials", "true")
 
 	statusCode, _ := herr.HttpStatusCode()
 	w.WriteHeader(statusCode)
