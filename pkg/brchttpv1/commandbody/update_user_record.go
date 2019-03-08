@@ -7,11 +7,11 @@ import (
 	"github.com/jbcc/brc-api/pkg/brcapiv1"
 )
 
-type CreateOrUpdateUserIdentity struct {
-	Data brcapiv1.UserIdentity `json:"data"`
+type UpdateUserRecord struct {
+	Data brcapiv1.UserRecord `json:"data"`
 }
 
-func (body CreateOrUpdateUserIdentity) JSONBody() (*bytes.Buffer, error) {
+func (body UpdateUserRecord) JSONBody() (*bytes.Buffer, error) {
 	binary, err := json.Marshal(body)
 	if err != nil {
 		return nil, err

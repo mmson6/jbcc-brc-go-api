@@ -23,7 +23,6 @@ func GetHealth(w http.ResponseWriter, r *http.Request) {
 		"package": "rmwebservice",
 	})
 	log.Info(`getting system health`)
-	log.Info(`getting system health hahaha mike check`)
 
 	version := "v1"
 
@@ -46,6 +45,8 @@ func GetHealth(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Length", contentLength)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.WriteHeader(200)
 
 	_, _ = w.Write(jsonBin)

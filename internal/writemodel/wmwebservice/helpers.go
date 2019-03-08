@@ -3,14 +3,7 @@ package wmwebservice
 import (
 	"context"
 	"io/ioutil"
-	// "log"
 	"net/http"
-	// "time"
-	// "code.siemens.com/horizon/platform-verticals/user/uo-api-go/internal/auth0"
-	// "code.siemens.com/horizon/platform-verticals/user/uo-api-go/internal/events/uoevents"
-	// "code.siemens.com/horizon/platform-verticals/user/uo-api-go/internal/uo"
-	// wmrepo "code.siemens.com/horizon/platform-verticals/user/uo-api-go/internal/wm/repository"
-	// "code.siemens.com/horizon/platform-verticals/user/uo-api-go/pkg/herror"
 )
 
 // func loadUser(ctx context.Context) (*uoevents.User, error) {

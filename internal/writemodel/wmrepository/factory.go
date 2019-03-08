@@ -1,4 +1,4 @@
-package rmrepository
+package wmrepository
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 
 type ctxKey string
 
-const keyRepo ctxKey = "rm.repo"
+const keyRepo ctxKey = "wm.repo"
 
 func Build(ctx context.Context) Repository {
 	val := ctx.Value(keyRepo)
