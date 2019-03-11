@@ -27,6 +27,7 @@ func GetUserIdentity(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["user_id"]
 
+	// Common setup
 	ctx := r.Context()
 	log := logger.Current(ctx).WithFields(logrus.Fields{
 		"func":    "GetUserIdentity",

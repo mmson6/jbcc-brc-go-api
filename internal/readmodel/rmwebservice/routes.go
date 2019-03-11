@@ -14,4 +14,5 @@ func AddRoutes(r *mux.Router) {
 	// Health GET requests
 	rGets.HandleFunc("/health", GetHealth)
 	rGets.HandleFunc("/records/{user_id}", GetUserRecords)
+	rGets.HandleFunc("/leaderboard", GetLeaderboard)
 }

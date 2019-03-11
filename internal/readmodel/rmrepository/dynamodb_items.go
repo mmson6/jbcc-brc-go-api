@@ -1,6 +1,8 @@
 package rmrepository
 
 import (
+	"fmt"
+
 	"github.com/jbcc/brc-api/internal/models"
 	"github.com/jbcc/brc-api/pkg/brcapiv1"
 	"github.com/mitchellh/mapstructure"
@@ -38,6 +40,23 @@ func userRecordForItem(item tableItem) *models.UserRecord {
 	}
 
 	return &model
+}
+
+func leaderboardForItems(items []tableItem) *models.Leaderboard {
+	users := make([]models.User, 0, len(items))
+	for _, item := range items {
+		user := models.User{
+			DisplayName: item.UniqueKey,
+			VerseCount:  item.Verses,
+		}
+		users = append(users, user)
+	}
+
+	leaderboard := models.Leaderboard{
+		Users: users,
+	}
+
+	return &leaderboard
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -17,6 +17,7 @@ type GetHealthResponse struct {
 }
 
 func GetHealth(w http.ResponseWriter, r *http.Request) {
+	// Common setup
 	ctx := r.Context()
 	log := logger.Current(ctx).WithFields(logrus.Fields{
 		"func":    "GetHealth",
