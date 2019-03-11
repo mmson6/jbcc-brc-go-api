@@ -3,11 +3,11 @@ package rmwebservice
 import (
 	"context"
 	"encoding/json"
-	"errors"
+	// "errors"
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	// "github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 
 	"github.com/jbcc/brc-api/internal/models"
@@ -16,41 +16,29 @@ import (
 	"github.com/jbcc/brc-api/pkg/logger"
 )
 
-type GetUserRecordsResponse struct {
+type GetLeaderboardResponse struct {
 	Status  string `json:"status"`
 	Version string `json:"version"`
 	UserID  string `json:"userId"`
 }
 
-func GetUserRecords(w http.ResponseWriter, r *http.Request) {
-	// Extract the request variables
-
-	vars := mux.Vars(r)
-	userID := vars["user_id"]
-
+func GetLeaderboard(w http.ResponseWriter, r *http.Request) {
 	// Common setup
 	ctx := r.Context()
 	log := logger.Current(ctx).WithFields(logrus.Fields{
-		"func":    "GetUserIdentity",
+		"func":    "GetLeaderboard",
 		"package": "rmwebservice",
 	})
 
-	// Guard statements
-	if userID == "" {
-		err := errors.New("user ID not found")
-		webresponse.WriteErrorJSON(ctx, w, err)
-		return
-	}
-
 	// Find user record by userID
-	userRecordRef, err := findUserRecordByUserID(ctx, userID)
+	leaderboardRef, err := readBRCLeaderboard(ctx)
 	if err != nil {
 		log.WithError(err).Error("unable to find user record")
 		webresponse.WriteErrorJSON(ctx, w, err)
 		return
 	}
 
-	jsonBin, err := json.Marshal(userRecordRef)
+	jsonBin, err := json.Marshal(leaderboardRef)
 	if err != nil {
 		log.WithError(err).Error("unable to convert response object to JSON")
 		webresponse.WriteErrorJSON(ctx, w, err)
@@ -73,7 +61,7 @@ func GetUserRecords(w http.ResponseWriter, r *http.Request) {
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTIONS
 
-func findUserRecordByUserID(ctx context.Context, userID string) (*models.UserRecord, error) {
+func readBRCLeaderboard(ctx context.Context) (*models.Leaderboard, error) {
 	repo := rmrepository.Build(ctx)
-	return repo.ReadUserRecordByUserID(ctx, userID)
+	return repo.ReadLeaderboard(ctx)
 }

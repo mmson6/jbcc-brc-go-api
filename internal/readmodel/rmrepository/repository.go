@@ -14,6 +14,9 @@ type Repository interface {
 	// CHeck if duplicate user ID already exists
 	CheckForUniqueID(ctx context.Context, displayName string) (bool, error)
 
+	// Read current leaderboard of BRC
+	ReadLeaderboard(ctx context.Context) (*models.Leaderboard, error)
+
 	// Read user record data
 	ReadUserRecordByUserID(ctx context.Context, userID string) (*models.UserRecord, error)
 }
