@@ -3,7 +3,6 @@ package rmrepository
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
