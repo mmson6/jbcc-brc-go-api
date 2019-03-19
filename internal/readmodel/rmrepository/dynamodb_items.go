@@ -1,8 +1,6 @@
 package rmrepository
 
 import (
-	"fmt"
-
 	"github.com/jbcc/brc-api/internal/models"
 	"github.com/jbcc/brc-api/pkg/brcapiv1"
 	"github.com/mitchellh/mapstructure"
@@ -29,7 +27,10 @@ const (
 func userRecordForItem(item tableItem) *models.UserRecord {
 	var record brcapiv1.Record
 	_ = mapstructure.Decode(item.Data, &record)
+
+	record = fillUnderscoreBookError(record, item)
 	record = transformNullRecordToEmptyArray(record)
+	
 	model := models.UserRecord{
 		ID:           item.PartitionKey,
 		Group:        item.Group,
@@ -61,6 +62,111 @@ func leaderboardForItems(items []tableItem) *models.Leaderboard {
 
 ////////////////////////////////////////////////////////////////////////////////
 // HELPER FUNCTIONS
+
+func fillUnderscoreBookError(record brcapiv1.Record, item tableItem) brcapiv1.Record {
+	recordMap := item.Data.(map[string]interface{})
+
+	if recordMap["timothy_1"] != nil {
+		tim1 := recordMap["timothy_1"].([]interface{})
+		record.Timothy1 = transformToIntArray(tim1)
+	}
+	
+	if recordMap["samuel_1"] != nil {
+		samuel1 := recordMap["samuel_1"].([]interface{})
+		record.Samuel1 = transformToIntArray(samuel1)
+	}
+	
+	if recordMap["samuel_2"] != nil {
+		samuel2 := recordMap["samuel_2"].([]interface{})
+		record.Samuel2 = transformToIntArray(samuel2)
+	}
+	
+	if recordMap["kings_1"] != nil {
+		kings1 := recordMap["kings_1"].([]interface{})
+		record.Kings1 = transformToIntArray(kings1)
+	}
+	
+	if recordMap["kings_2"] != nil {
+		kings2 := recordMap["kings_2"].([]interface{})
+		record.Kings2 = transformToIntArray(kings2)
+	}
+	
+	if recordMap["chronicles_1"] != nil {
+		chronicles1 := recordMap["chronicles_1"].([]interface{})
+		record.Chronicles1 = transformToIntArray(chronicles1)
+	}
+	
+	if recordMap["chronicles_2"] != nil {
+		chronicles2 := recordMap["chronicles_2"].([]interface{})
+		record.Chronicles2 = transformToIntArray(chronicles2)
+	}
+	
+	if recordMap["corinthians_1"] != nil {
+		corinthians1 := recordMap["corinthians_1"].([]interface{})
+		record.Corinthians1 = transformToIntArray(corinthians1)
+	}
+	
+	if recordMap["corinthians_2"] != nil {
+		corinthians2 := recordMap["corinthians_2"].([]interface{})
+		record.Corinthians2 = transformToIntArray(corinthians2)
+	}
+	
+	if recordMap["thessalonians_1"] != nil {
+		thessalonians1 := recordMap["thessalonians_1"].([]interface{})
+		record.Thessalonians1 = transformToIntArray(thessalonians1)
+	}
+	
+	if recordMap["thessalonians_2"] != nil {
+		thessalonians2 := recordMap["thessalonians_2"].([]interface{})
+		record.Thessalonians2 = transformToIntArray(thessalonians2)
+	}
+	
+	if recordMap["timothy_1"] != nil {
+		timothy1 := recordMap["timothy_1"].([]interface{})
+		record.Timothy1 = transformToIntArray(timothy1)
+	}
+	
+	if recordMap["timothy_2"] != nil {
+		timothy2 := recordMap["timothy_2"].([]interface{})
+		record.Timothy2 = transformToIntArray(timothy2)
+	}
+	
+	if recordMap["peter_1"] != nil {
+		peter1 := recordMap["peter_1"].([]interface{})
+		record.Peter1 = transformToIntArray(peter1)
+	}
+	
+	if recordMap["peter_2"] != nil {
+		peter2 := recordMap["peter_2"].([]interface{})
+		record.Peter2 = transformToIntArray(peter2)
+	}
+	
+	if recordMap["john_1"] != nil {
+		john1 := recordMap["john_1"].([]interface{})
+		record.John1 = transformToIntArray(john1)
+	}
+	
+	if recordMap["john_2"] != nil {
+		john2 := recordMap["john_2"].([]interface{})
+		record.John2 = transformToIntArray(john2)
+	}
+	
+	if recordMap["john_3"] != nil {
+		john3 := recordMap["john_3"].([]interface{})
+		record.John3 = transformToIntArray(john3)
+	}
+	
+	return record
+}
+
+func transformToIntArray(data []interface{}) []int {
+	array := make([]int, 0, len(data))
+	for _, item := range data {
+		intValue := int(item.(float64))
+		array = append(array, intValue)
+	}
+	return array
+}
 
 func transformNullRecordToEmptyArray(record brcapiv1.Record) brcapiv1.Record {
 	if record.Genesis == nil {
